@@ -1,11 +1,11 @@
-const mysql = require("mysql");
+const mysql = require("mysql2");
 const inquirer = require("inquirer");
 require("console.table");
 
 
 //mysql connection
 const connection = mysql.createConnection({
-    host: 'localhost',
+    host : '127.0.0.1',
     port: 3306,
 
     // Your username
