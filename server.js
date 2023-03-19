@@ -1,6 +1,6 @@
 const mysql = require("mysql2");
 const inquirer = require("inquirer");
-require("console.table");
+const consoleTable = require("console.table");
 
 
 //mysql connection
@@ -25,8 +25,7 @@ connection.connect(function (err) {
 // function which prompts the user for what action they should take
 function firstPrompt() {
 
-  inquirer
-    .prompt({
+  inquirer.prompt({
       type: "list",
       name: "task",
       message: "Would you like to do?",
@@ -195,12 +194,11 @@ function promptInsert(roleChoices) {
           first_name: answer.first_name,
           last_name: answer.last_name,
           role_id: answer.roleId,
-          manager_id: answer.managerId,
         },
         function (err, res) {
           if (err) throw err;
           console.table(res);
-          console.log(res.insertedRows + "Inserted successfully!\n");
+          console.log(res.insertedRows + " Inserted successfully!\n");
           firstPrompt();
         });
     });
