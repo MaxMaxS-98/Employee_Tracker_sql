@@ -23,8 +23,7 @@ connection.connect(function (err) {
 
 // function which prompts the user for what action they should take
 function firstPrompt() {
-  inquirer
-    .prompt({
+  inquirer.prompt({
       type: "list",
       name: "task",
       message: "What would you like to do?",
@@ -97,14 +96,13 @@ function viewEmployeeByDepartment() {
   console.log("Viewing employees by department\n");
 
   var query =
-`SELECT d.id, d.name, r.salary AS budget
-FROM employee e
-LEFT JOIN role r
-ON e.role_id = r.id
-LEFT JOIN department d
-ON d.id = r.department_id
-GROUP BY d.id, d.name
-SUM(r.salary) AS total_salary`
+  `SELECT d.id, d.name, SUM(r.salary) AS budget
+  FROM employee e
+  LEFT JOIN role r
+  ON e.role_id = r.id
+  LEFT JOIN department d
+  ON d.id = r.department_id
+  GROUP BY d.id, d.name`;
 
  connection.query(query, function (err, res) {
     if (err) throw err;
@@ -205,7 +203,7 @@ function promptInsert(roleChoices) {
     });
 }
 
-function removeEmployees() {
+function removeEmployee() {
   console.log("Deleting an employee");
   var query =
     `SELECT e.id, e.first_name, e.last_name
