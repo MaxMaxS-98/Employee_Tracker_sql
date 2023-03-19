@@ -2,41 +2,41 @@ const mysql = require("mysql2");
 const inquirer = require("inquirer");
 const consoleTable = require("console.table");
 
-
-//mysql connection
+// mysql connection
 const connection = mysql.createConnection({
-    host : '127.0.0.1',
-    port: 3306,
+  host: "127.0.0.1",
+  port: 3306,
 
-    // Your username
-    user: 'root',
+  // Your username
+  user: "root",
 
-    // Your password
-    password: 'password',
-    database: 'employeesDB'
+  // Your password
+  password: "password",
+  database: "employeesDB",
 });
 
 connection.connect(function (err) {
-    if (err) throw err;
-    console.log("connected as id " + connection.threadId);
-    firstPrompt();
+  if (err) throw err;
+  console.log("connected as id " + connection.threadId);
+  firstPrompt();
 });
 
 // function which prompts the user for what action they should take
 function firstPrompt() {
-
-  inquirer.prompt({
+  inquirer
+    .prompt({
       type: "list",
       name: "task",
-      message: "Would you like to do?",
+      message: "What would you like to do?",
       choices: [
         "View Employees",
         "View Employees by Department",
         "Add Employee",
-        "Remove Employees",
+        "Remove Employee",
         "Update Employee Role",
         "Add Role",
-        "End"]
+        "End",
+      ],
     })
     .then(function ({ task }) {
       switch (task) {
@@ -47,13 +47,13 @@ function firstPrompt() {
         case "View Employees by Department":
           viewEmployeeByDepartment();
           break;
-      
+
         case "Add Employee":
           addEmployee();
           break;
 
-        case "Remove Employees":
-          removeEmployees();
+        case "Remove Employee":
+          removeEmployee();
           break;
 
         case "Update Employee Role":
@@ -74,15 +74,15 @@ function firstPrompt() {
 function viewEmployee() {
   console.log("Viewing employees\n");
 
-  var query =
-    `SELECT e.id, e.first_name, e.last_name, r.title, d.name AS department, r.salary, CONCAT(m.first_name, ' ', m.last_name) AS manager
+  var query = `
+    SELECT e.id, e.first_name, e.last_name, r.title, d.name AS department, r.salary, CONCAT(m.first_name, ' ', m.last_name) AS manager
     FROM employee e
     LEFT JOIN role r
     ON e.role_id = r.id
     LEFT JOIN department d
     ON d.id = r.department_id
     LEFT JOIN employee m
-    ON m.id = e.manager_id`
+    ON m.id = e.manager_id`;
 
   connection.query(query, function (err, res) {
     if (err) throw err;
@@ -103,7 +103,8 @@ LEFT JOIN role r
 ON e.role_id = r.id
 LEFT JOIN department d
 ON d.id = r.department_id
-GROUP BY d.id, d.name`
+GROUP BY d.id, d.name
+SUM(r.salary) AS total_salary`
 
  connection.query(query, function (err, res) {
     if (err) throw err;
