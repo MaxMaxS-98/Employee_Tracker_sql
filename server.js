@@ -89,7 +89,6 @@ function viewEmployee() {
     console.log("Employees viewed!\n");
     firstPrompt();
   });
-
 }
 
 function viewEmployeeByDepartment() {
@@ -146,8 +145,6 @@ WHERE d.id = ?`
     });
 }
 
-
-// Make a employee array
 function addEmployee() {
   console.log("Inserting an employee!")
   var query =
@@ -155,6 +152,7 @@ function addEmployee() {
       FROM role r`
     
   connection.query(query, function (err, res) {
+    console.log(158, res)
     if (err) throw err;
     const roleChoices = res.map(({ id, title, salary }) => ({
       value: id, title: `${title}`, salary: `${salary}`
@@ -185,6 +183,7 @@ function promptInsert(roleChoices) {
       },
     ])
     .then(function (answer) {
+      console.log(188)
       console.log(answer);
 
       var query = `INSERT INTO employee SET ?`
